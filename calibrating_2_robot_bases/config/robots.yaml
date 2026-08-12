@@ -1,0 +1,41 @@
+# Pad-mating calibration configuration for the two ceiling-mounted UR5e robots.
+#
+# Preserve this near-accurate starting estimate for comparison only. The
+# calibrator never writes robot_mounts.toml automatically:
+#   current world -> left_base:
+#     translation_m: [0.5, 0.0, 0.0]
+#     quaternion_xyzw: [1.0, 0.0, 0.0, 0.0]   # roll = pi
+#   current world -> right_base:
+#     translation_m: [-0.5, 0.0, -0.002]
+#     quaternion_xyzw: [1.0, 0.0, 0.0, 0.0]   # roll = pi
+#   derived current left_base -> right_base:
+#     translation_m: [-1.0, 0.0, 0.002]
+#     quaternion_xyzw: [0.0, 0.0, 0.0, 1.0]
+
+robots:
+  left:
+    base_frame: left/base_link
+    calibration_pad_frame: left/ag95/left_pad_surface
+  right:
+    base_frame: right/base_link
+    calibration_pad_frame: right/ag95/left_pad_surface
+
+contact:
+  # Both origins are on the physical surfaces. Positive Z points out of each
+  # pad. For these published AG95 pad axes, the facing, edge-aligned mating is
+  # pi radians about Y (verified against repeated physical matings).
+  left_pad_to_right_pad_when_mated:
+    translation_m: [0.0, 0.0, 0.0]
+    quaternion_xyzw: [0.0, 1.0, 0.0, 0.0]
+
+sampling:
+  minimum_samples: 5
+  recommended_samples: 8
+
+world:
+  # Mode 1: reference_base (set reference_robot to left or right).
+  # Mode 2: midpoint (recommended for bimanual work).
+  mode: midpoint
+  reference_robot: left
+  # The robots are ceiling-mounted, so physical up is -Z in left_base.
+  up_in_left_base: [0.0, 0.0, -1.0]

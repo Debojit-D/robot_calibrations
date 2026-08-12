@@ -1,0 +1,11 @@
+# Copy this file outside version control for a calibration run. Each pose is
+# captured simultaneously while the configured pads are flush, centered, and
+# edge-aligned. Values are pad poses expressed in their corresponding bases.
+samples:
+  - label: pose_1
+    left_base_to_left_pad:
+      translation_m: [0.0, 0.0, 0.0]
+      quaternion_xyzw: [0.0, 0.0, 0.0, 1.0]
+    right_base_to_right_pad:
+      translation_m: [0.0, 0.0, 0.0]
+      quaternion_xyzw: [1.0, 0.0, 0.0, 0.0]
