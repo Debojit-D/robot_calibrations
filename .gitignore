@@ -1,0 +1,8 @@
+build/
+install/
+log/
+
+# vcs-imported build dependencies of industrial_calibration_ros2 (see
+# industrial_calibration_ros2/dependencies.repos). Re-fetch with:
+#   vcs import deps < industrial_calibration_ros2/dependencies.repos
+deps/

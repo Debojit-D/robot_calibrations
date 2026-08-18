@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+  Wraps industrial_calibration_ros's data_collection.launch.xml for this
+  workspace's eye-to-hand setup: a stationary D455 (world-fixed) and a
+  calibration target mounted on a moving UR5e wrist.
+
+  The upstream data_collection_node.py uses a plain, unremapped tf2 Buffer
+  (default /tf, /tf_static). This workspace's real robot bringup does NOT
+  publish a merged world-rooted TF tree on those default topics (each arm's
+  driver publishes on its own /{side}_ur5e/driver_tf with unprefixed frame
+  names). The merged tree with a shared "world" and prefixed "left/tool0" /
+  "right/tool0" frames only exists on /dual_ur5e_rviz/tf(_static), built by
+  dual_ur5e_control's view_robot.launch.py. So run that launch file alongside
+  this one, and remap /tf here to read from it.
+-->
+<launch>
+  <!-- Set to "right/tool0" if the target is mounted on the right arm instead -->
+  <arg name="target_mount_frame" default="left/tool0"/>
+  <arg name="camera_mount_frame" default="world"/>
+
+  <arg name="image_topic" default="/camera/camera/color/image_raw"/>
+  <arg name="config_file" default="$(find-pkg-share industrial_calibration_ros)/config/target_detector_config.yaml"/>
+  <arg name="save_path" default="$(env HOME)/calibration_data/eye_to_hand"/>
+  <arg name="headless" default="false"/>
+
+  <group>
+    <remap from="/tf" to="/dual_ur5e_rviz/tf"/>
+    <remap from="/tf_static" to="/dual_ur5e_rviz/tf_static"/>
+
+    <include file="$(find-pkg-share industrial_calibration_ros)/launch/data_collection.launch.xml">
+      <arg name="static_camera" value="true"/>
+      <arg name="camera_mount_frame" value="$(var camera_mount_frame)"/>
+      <arg name="target_mount_frame" value="$(var target_mount_frame)"/>
+      <arg name="camera_frame" value="camera_color_optical_frame"/>
+      <arg name="target_frame" value="cal_target_frame"/>
+      <arg name="image_topic" value="$(var image_topic)"/>
+      <arg name="config_file" value="$(var config_file)"/>
+      <arg name="save_path" value="$(var save_path)"/>
+      <arg name="headless" value="$(var headless)"/>
+    </include>
+  </group>
+</launch>
