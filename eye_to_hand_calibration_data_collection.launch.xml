@@ -19,13 +19,17 @@
   <arg name="camera_mount_frame" default="world"/>
 
   <arg name="image_topic" default="/camera/camera/color/image_raw"/>
-  <arg name="config_file" default="$(find-pkg-share industrial_calibration_ros)/config/target_detector_config.yaml"/>
+  <!-- Matches the printed target from calibration_targets/generate_charuco_target.py
+       (7x5 squares, 30mm square, 23mm marker, DICT_4X4_250). NOT the upstream
+       sample config in industrial_calibration_ros2/config/, which describes a
+       different 10x6/40mm/31mm board and has a wrong dictionary comment. -->
+  <arg name="config_file" default="$(dirname)/calibration_targets/charuco_7x5_30mm_dict_4x4_250_detector_config.yaml"/>
   <arg name="save_path" default="$(env HOME)/calibration_data/eye_to_hand"/>
   <arg name="headless" default="false"/>
 
   <group>
-    <remap from="/tf" to="/dual_ur5e_rviz/tf"/>
-    <remap from="/tf_static" to="/dual_ur5e_rviz/tf_static"/>
+    <set_remap from="/tf" to="/dual_ur5e_rviz/tf"/>
+    <set_remap from="/tf_static" to="/dual_ur5e_rviz/tf_static"/>
 
     <include file="$(find-pkg-share industrial_calibration_ros)/launch/data_collection.launch.xml">
       <arg name="static_camera" value="true"/>

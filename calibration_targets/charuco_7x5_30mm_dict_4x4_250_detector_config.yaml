@@ -1,0 +1,9 @@
+# ChArUco grid target finder
+# Generated to match calibration_targets/generate_charuco_target.py
+target_finder:
+  type: CharucoGridTargetFinder
+  rows: 5
+  cols: 7
+  chessboard_dim: 0.030
+  aruco_marker_dim: 0.023
+  dictionary: 2  # DICT_4X4_250
